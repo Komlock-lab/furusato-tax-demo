@@ -143,7 +143,7 @@ function formatChatText(text) {
 function appendUserMessage(text) {
   const row = document.createElement('div');
   row.className = 'message-row user';
-  row.innerHTML = `<div class="bubble">${formatChatText(text)}<time>既読<br>${nextMessageTime()}</time></div>`;
+  row.innerHTML = `<time>既読<br>${nextMessageTime()}</time><div class="bubble">${formatChatText(text)}</div>`;
   dynamicMessages.append(row);
   scrollChat();
 }
@@ -151,7 +151,7 @@ function appendUserMessage(text) {
 function appendAgentMessage(text) {
   const row = document.createElement('div');
   row.className = 'message-row agent';
-  row.innerHTML = `<div class="mascot mascot-tiny"></div><div class="bubble">${formatChatText(text)}<time>${nextMessageTime()}</time></div>`;
+  row.innerHTML = `<div class="mascot mascot-tiny"></div><div class="bubble">${formatChatText(text)}</div><time>${nextMessageTime()}</time>`;
   dynamicMessages.append(row);
   scrollChat();
 }

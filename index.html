@@ -53,19 +53,19 @@
       border-right-width: 7px;
       border-top-color: #8de055;
     }
-    .bubble time {
-      right: -30px;
-      bottom: 0;
+    /* 投稿日時・既読は吹き出しの外側（相手は右、自分は左）に置く */
+    .message-row .bubble { flex: 0 1 auto; min-width: 0; }
+    .message-row > time {
+      flex: 0 0 auto;
+      align-self: flex-end;
       font-size: 7px;
-      line-height: 1.2;
+      font-weight: 500;
+      line-height: 1.3;
       color: #40566a;
+      white-space: nowrap;
     }
-    .message-row.user .bubble time {
-      left: -34px;
-      bottom: 0;
-      min-width: 27px;
-      text-align: right;
-    }
+    .message-row.agent > time { margin-left: -2px; }
+    .message-row.user > time { margin-right: -1px; text-align: right; }
     .chat-body .profile-confirm-card,
     .chat-body .proposal-card,
     .chat-body .review-card,
@@ -109,6 +109,104 @@
     }
     .quick-replies button:hover { background: #84d94f; box-shadow: none; }
     .quick-replies button:hover::after { border-top-color: #84d94f; }
+    /* LINE実機（ライトブルーテーマ）のヘッダー・入力欄 */
+    .phone-screen.is-chat .status-bar { color: #fff; background: #84d0ef; }
+    .phone-screen.is-chat .status-icons i { background: #fff; }
+    .phone-screen.is-chat .status-icons b { border-color: #fff; }
+    .screen-chat .chat-header {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      height: 52px;
+      padding: 0 8px 0 4px;
+      background: #84d0ef;
+      color: #fff;
+      border: 0;
+    }
+    .chat-header svg,
+    .composer svg {
+      display: block;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .chat-header .icon-button {
+      display: grid;
+      place-items: center;
+      width: 36px;
+      height: 40px;
+      padding: 0;
+      color: #fff;
+      transform: none;
+    }
+    .chat-header .icon-button svg { width: 23px; height: 23px; }
+    .chat-header > #back-home svg { width: 24px; height: 24px; stroke-width: 1.6; }
+    .chat-header .chat-title {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      min-width: 0;
+      text-align: left;
+    }
+    .account-badge {
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #2fcf6f;
+    }
+    .account-badge svg { width: 14px; height: 14px; fill: #fff; stroke: none; }
+    .chat-header .chat-title h2 {
+      margin: 0;
+      color: #fff;
+      font-size: 16px;
+      font-weight: 700;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .chat-header .chat-actions { display: flex; align-items: center; gap: 2px; }
+    .chat-header .chat-actions .icon-button:first-child,
+    .chat-header .chat-actions .icon-button:last-child { transform: none; font-size: inherit; }
+    .screen-chat .composer {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      height: auto;
+      min-height: 52px;
+      padding: 8px 12px;
+      border: 0;
+      background: #e3f6fc;
+      color: #7fcfea;
+    }
+    .composer > svg { flex: 0 0 auto; width: 23px; height: 23px; }
+    .composer svg .fill { fill: currentColor; stroke: none; }
+    .composer-input {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      min-width: 0;
+      height: 36px;
+      padding: 0 6px;
+      border: 1px solid #cdecf7;
+      border-radius: 18px;
+      background: #f4fbfe;
+    }
+    .composer-input svg { width: 24px; height: 24px; }
+    /* iOSのドックアイコン */
+    .dock i {
+      overflow: hidden;
+      background: none;
+      font-size: 0;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, .12);
+    }
+    .dock i svg { display: block; width: 100%; height: 100%; }
   </style>
 </head>
 <body>
@@ -170,21 +268,36 @@
             <span class="notification-copy"><b>ふるさと納税くん</b><small>今</small><strong id="notification-message">あなたに合いそうな、いい返礼品を3つ見つけたよー！ 🎁</strong></span>
           </button>
           <div class="tap-guide"><span>↗</span><p>タップして<br>チャットを開く</p></div>
-          <div class="dock" aria-hidden="true"><i>☎</i><i>✉</i><i>◉</i><i>●</i></div>
+          <div class="dock" aria-hidden="true">
+            <i><svg viewBox="0 0 60 60"><defs><linearGradient id="dock-green" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#84ef7c"/><stop offset="1" stop-color="#2dbd3b"/></linearGradient></defs><rect width="60" height="60" fill="url(#dock-green)"/><path fill="#fff" transform="translate(30 30) scale(1.18) translate(-30 -30)" d="M22.3 13.6c1.3-.4 2.7.2 3.4 1.4l3 5.4c.6 1.1.4 2.5-.5 3.4l-2.6 2.5c-.4.4-.5 1-.2 1.5 1.9 3.6 4.4 6.2 8 8.1.5.3 1.1.2 1.5-.2l2.5-2.6c.9-.9 2.3-1.1 3.4-.5l5.4 3c1.2.7 1.8 2.1 1.4 3.4l-.9 3c-.5 1.6-1.9 2.8-3.6 2.9-4 .2-9.9-1.4-15.9-7.4s-7.6-11.9-7.4-15.9c.1-1.7 1.3-3.1 2.9-3.6z"/></svg></i>
+            <i><svg viewBox="0 0 60 60"><defs><linearGradient id="dock-blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2cc0fb"/><stop offset="1" stop-color="#1566df"/></linearGradient></defs><rect width="60" height="60" fill="#fff"/><circle cx="30" cy="30" r="22.5" fill="url(#dock-blue)"/><circle cx="30" cy="30" r="19.5" fill="none" stroke="#fff" stroke-width="2.4" stroke-dasharray=".45 2.1" opacity=".9"/><g transform="rotate(45 30 30)"><path fill="#ff3b30" d="M27.4 30 30 9.5l2.6 20.5z"/><path fill="#fff" d="M27.4 30 30 50.5l2.6-20.5z"/></g></svg></i>
+            <i><svg viewBox="0 0 60 60"><rect width="60" height="60" fill="url(#dock-green)"/><ellipse cx="30" cy="28.5" rx="19" ry="15" fill="#fff"/><path fill="#fff" d="M17.4 37.5c-.3 3.6-1.8 6.1-4.3 7.6 4.4.3 8.4-1 11.4-3.7z"/></svg></i>
+            <i><svg viewBox="0 0 60 60"><defs><linearGradient id="dock-red" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fd6a80"/><stop offset="1" stop-color="#f7253d"/></linearGradient></defs><rect width="60" height="60" fill="url(#dock-red)"/><g fill="#fff"><path d="M23 19.5 42.5 14v5.6L25.8 24.4V42h-2.8z"/><path d="M39.7 15h2.8v23h-2.8z"/><ellipse cx="19.8" cy="42.5" rx="6.2" ry="4.9" transform="rotate(-18 19.8 42.5)"/><ellipse cx="36.5" cy="38.5" rx="6.2" ry="4.9" transform="rotate(-18 36.5 38.5)"/></g></svg></i>
+          </div>
         </section>
 
         <section class="screen screen-chat" data-screen="chat" aria-label="チャット画面">
           <header class="chat-header">
-            <button class="icon-button" id="back-home" aria-label="ホームに戻る">‹</button>
-            <div class="chat-title"><h2>ふるさと納税くん</h2></div>
-            <div class="chat-actions"><button class="icon-button" aria-label="検索">⌕</button><button class="icon-button" aria-label="メニュー">☰</button></div>
+            <button class="icon-button" id="back-home" aria-label="ホームに戻る"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 3.5 6.5 12l8.5 8.5"/></svg></button>
+            <div class="chat-title"><span class="account-badge" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m12 6.6 1.6 3.3 3.6.5-2.6 2.5.6 3.6-3.2-1.7-3.2 1.7.6-3.6-2.6-2.5 3.6-.5z"/></svg></span><h2>ふるさと納税くん</h2></div>
+            <div class="chat-actions">
+              <button class="icon-button" aria-label="トーク内検索"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="7.5"/><path d="M10.5 6.5v4.2l2.8 1.6M16 16l5 5"/></svg></button>
+              <button class="icon-button" aria-label="メニュー"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5h16M4 12h16M4 18.5h16"/></svg></button>
+              <button class="icon-button" aria-label="設定"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
+            </div>
           </header>
           <div class="chat-body" id="chat-body" aria-live="polite">
             <div class="day-label">1月1日</div>
             <div id="dynamic-messages"></div>
           </div>
           <div class="quick-replies is-hidden" id="quick-replies"></div>
-          <div class="composer" aria-hidden="true"><b>＋</b><span>▣</span><span>▧</span><p>メッセージを入力</p><span>☺</span><span>♩</span></div>
+          <div class="composer" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M12 3v18M3 12h18"/></svg>
+            <svg viewBox="0 0 24 24"><path d="M8.5 5.5 9.8 3.5h4.4l1.3 2H19a2 2 0 0 1 2 2V18a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7.5a2 2 0 0 1 2-2z"/><circle cx="12" cy="12.5" r="3.5"/></svg>
+            <svg viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="2.5"/><path class="fill" d="m7.5 16.5 5-6.5 4 6.5z"/><circle class="fill" cx="16" cy="8" r="1.2"/></svg>
+            <div class="composer-input"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle class="fill" cx="9" cy="10" r="1.1"/><circle class="fill" cx="15" cy="10" r="1.1"/><path d="M8.3 14.2a4.5 4.5 0 0 0 7.4 0"/></svg></div>
+            <svg viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/></svg>
+          </div>
         </section>
         <button class="demo-ending" id="demo-ending" hidden aria-label="デモは終了です。体験ありがとうございました。タップしてホームへ戻る">
           <strong>デモは終了です。</strong>

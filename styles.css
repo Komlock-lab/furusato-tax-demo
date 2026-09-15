@@ -61,7 +61,6 @@
   .benefits strong { font-size: 14px; line-height: 1.6; white-space: normal; }
   .benefits span { margin-top: 7px; font-size: 14px; line-height: 1.65; }
   .journey-card li > b { flex-shrink: 0; }
-  .composer p { min-width: 0; white-space: nowrap; }
 }
 
 @media (max-width: 360px) {
@@ -163,7 +162,6 @@
   .phone-screen .notification-copy > b { display: block; padding-right: 24px; font-size: 16px; }
   .phone-screen .notification-copy strong { font-size: 16px; overflow-wrap: anywhere; }
   .phone-screen .tap-guide p { font-size: 16px; }
-  .phone-screen .chat-header { grid-template-columns: 40px minmax(0, 1fr) 64px; }
   .phone-screen .chat-title h2 { font-size: 16px; }
   .phone-screen .day-label { font-size: 14px; }
   .phone-screen .message-row .bubble {
@@ -175,25 +173,7 @@
     overflow-wrap: anywhere;
   }
   .phone-screen .message-row.user .bubble { max-width: calc(100% - 60px); }
-  .phone-screen .message-row .bubble time {
-    position: static;
-    display: block;
-    min-width: 0;
-    margin-top: 6px;
-    font-size: 14px;
-    line-height: 1.35;
-    text-align: right;
-  }
-  .phone-screen .message-row.user .bubble time {
-    position: absolute;
-    top: auto;
-    right: calc(100% + 8px);
-    bottom: 0;
-    left: auto;
-    width: 44px;
-    margin-top: 0;
-    white-space: nowrap;
-  }
+  .phone-screen .message-row > time { font-size: 14px; line-height: 1.35; }
   .phone-screen .bubble small,
   .phone-screen .message-product-link { font-size: 14px; line-height: 1.6; }
   .phone-screen .screen-chat .quick-replies {
@@ -209,14 +189,6 @@
     line-height: 1.6;
     min-height: 44px;
     max-width: 100%;
-  }
-  .phone-screen .composer { height: auto; min-height: 52px; gap: 6px; }
-  .phone-screen .composer p {
-    height: auto;
-    padding: 6px 8px;
-    font-size: 14px;
-    overflow: hidden;
-    text-overflow: ellipsis;
   }
   .phone-screen .chat-body :is(.profile-confirm-card, .proposal-card, .review-card, .complete-card, .one-stop-card, .memory-card, .processing-card) {
     margin-left: 0;
