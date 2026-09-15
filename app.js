@@ -5,6 +5,7 @@ const dynamicMessages = document.getElementById('dynamic-messages');
 const quickReplies = document.getElementById('quick-replies');
 const dayLabel = document.querySelector('.day-label');
 const timeTransition = document.getElementById('time-transition');
+const demoEnding = document.getElementById('demo-ending');
 const phoneScreen = document.querySelector('.phone-screen');
 const transitionLabel = document.getElementById('transition-label');
 const transitionTitle = document.getElementById('transition-title');
@@ -112,7 +113,7 @@ function showScreen(name) {
 }
 
 function scrollChat() {
-  requestAnimationFrame(() => { chatBody.scrollTo({ top: chatBody.scrollHeight, behavior: 'instant' }); });
+  requestAnimationFrame(() => { chatBody.scrollTop = chatBody.scrollHeight; });
 }
 
 function formatClock(minutes) {
@@ -313,7 +314,7 @@ function stageOpeningMessage(stage) {
   const messages = {
     recommendation: 'あなたに合いそうな、いい返礼品を3つ見つけたよー！ 🎁',
     oneStop: `5月の${proposalProducts.length}自治体への寄付について、ワンストップ特例の申請準備ができました 📝`,
-    yearEndReview: '昨年の寄付で届いた返礼品について、ひとつだけ教えてください 😊 一番よかったのはどれでしたか？'
+    yearEndReview: '昨年の寄付で届いた返礼品について、ひとつだけ教えてください 😊'
   };
   return messages[stage];
 }
@@ -402,21 +403,14 @@ function appendProposalCard() {
 
 function appendProductLinkMessages() {
   if (!proposalProducts.length) return;
-  appendAgentMessage('返礼品の詳細を送るね。タップすると、このデモ内で確認できます。');
+  const site = selectedDonationSite();
+  appendAgentMessage('返礼品ごとの商品ページを送るね。');
   proposalProducts.forEach((product, index) => {
-    later(() => appendAgentMessage(`${product.name}<br><button class="message-product-link" data-product-id="${product.id}">返礼品の詳細を見る</button>`), 450 + index * 650);
+    later(() => appendAgentMessage(`${product.name}<br><a class="message-product-link" href="${product.url}" target="_blank" rel="noreferrer">${product.url}</a>`), 450 + index * 650);
   });
   const afterLinks = 650 + proposalProducts.length * 650;
-  later(() => appendAgentMessage('内容を確認したら、まとめて寄付と決済を体験できます。実際の支払いは発生しません。'), afterLinks);
-  later(() => showChoices([{ label: '詳しく確認する', value: 'review' }, { label: '別の候補を見る', value: 'alternative' }, { label: '今回は見送る', value: 'stop' }], 'flow'), afterLinks + 650);
-}
-
-function openProductDetails(productId) {
-  const product = proposalProducts.find((item) => item.id === productId);
-  if (!product) return;
-  const index = proposalProducts.indexOf(product);
-  document.getElementById('product-content').innerHTML = `<div class="product-photo ${product.id}">${product.label}</div><h2 id="product-title">${product.name}</h2><dl><div><dt>寄付額</dt><dd>${formatMoney(product.amount)}</dd></div><div><dt>配送予定</dt><dd>${deliveryDates()[index]}</dd></div><div><dt>保管方法</dt><dd>${product.temp}</dd></div><div><dt>掲載サイト（デモ設定）</dt><dd>${selectedDonationSite().name}</dd></div></dl>`;
-  document.getElementById('product-dialog').showModal();
+  later(() => appendAgentMessage(`どれも${site.name}の商品ページです。<br>内容を確認したら、まとめて寄付と決済まで進められます。`), afterLinks);
+  later(() => showChoices([{ label: '寄付に進む', value: 'review' }, { label: '今回は見送る', value: 'stop' }], 'flow'), afterLinks + 650);
 }
 
 function showDetails() {
@@ -435,7 +429,7 @@ function showDetails() {
 
 function showFinalReview() {
   hideChoices();
-  appendUserMessage('詳しく確認する');
+  appendUserMessage('寄付に進む');
   const dates = deliveryDates();
   const site = selectedDonationSite();
   later(() => {
@@ -445,7 +439,7 @@ function showFinalReview() {
       <dl><div><dt>控除上限目安</dt><dd>約${formatMoney(profile.limit)}</dd></div><div><dt>上限までの余裕</dt><dd>${formatMoney(Math.max(profile.limit - profile.donatedAmount - proposalTotal, 0))}</dd></div><div><dt>利用サイト</dt><dd>${site.name}</dd></div><div><dt>配送予定</dt><dd>${dates.slice(0, proposalProducts.length).join('・')}</dd></div><div><dt>ワンストップ特例</dt><dd>${profile.oneStop}</dd></div><div><dt>寄付金の用途</dt><dd>各自治体のおすすめ用途</dd></div></dl><p>登録済みの住所・決済方法を使用します。控除額はデモ上の参考値です。</p>`;
     dynamicMessages.append(card);
     scrollChat();
-    showChoices([{ label: '内容を確認して進める', value: 'proceed' }, { label: '寄付の用途を変更', value: 'purpose' }, { label: '配送時期を変更', value: 'delivery-change' }, { label: 'やめる', value: 'stop' }], 'flow');
+    showChoices([{ label: 'OK', value: 'proceed' }, { label: 'やめる', value: 'cancel' }], 'flow');
   }, 650);
 }
 
@@ -458,7 +452,7 @@ function adjustPreference(kind) {
 
 function startPaymentFlow() {
   hideChoices();
-  appendUserMessage('内容を確認して進める');
+  appendUserMessage('OK');
   later(() => appendAgentMessage('確認ありがとうございます。登録済みの情報を使って、寄付と決済を進めます。'), 800);
   later(showCompleteCard, 1900);
 }
@@ -509,7 +503,7 @@ function appendOneStopCard() {
     <p>氏名・住所・寄付情報を確認済みです。申請内容を自治体ごとに作成します。</p>`;
   dynamicMessages.append(card);
   scrollChat();
-  showChoices([{ label: `${proposalProducts.length}自治体分を申請する`, value: 'one-stop-submit' }, { label: 'あとで申請する', value: 'one-stop-later' }], 'flow');
+  showChoices([{ label: `${proposalProducts.length}自治体分を申請する`, value: 'one-stop-submit' }], 'flow');
 }
 
 function submitOneStop() {
@@ -527,15 +521,8 @@ function submitOneStop() {
   }, 1700);
 }
 
-function deferOneStop() {
-  hideChoices();
-  appendUserMessage('あとで申請する');
-  later(() => appendAgentMessage('わかりました。期限に間に合うよう、1月5日にもう一度お知らせしますね。'), 650);
-  later(() => scheduleYearEndReview('申請リマインドを設定しました'), 2600);
-}
-
 function scheduleYearEndReview(label) {
-  showTimeTransition(label, '翌年・1月', timeline.yearEndReview.date, 'yearEndReview');
+  showTimeTransition(label, '翌年1月', timeline.yearEndReview.date, 'yearEndReview');
 }
 
 function startYearEndReviewChat() {
@@ -573,7 +560,10 @@ function saveFeedback(score) {
     dynamicMessages.append(card);
     appendAgentMessage('ありがとう！この評価を今年の提案に使います。<br>今年は昨年よりも、あなたに合う候補を早く見つけられます 😊');
     scrollChat();
-    showChoices([{ label: 'もう一度体験する', value: 'restart' }], 'flow');
+    later(() => {
+      demoEnding.hidden = false;
+      demoEnding.focus();
+    }, 3500);
   }, 650);
 }
 
@@ -584,19 +574,18 @@ function showAlternative() {
   later(() => showChoices([{ label: '最初の候補を確認する', value: 'review' }, { label: '今回は見送る', value: 'stop' }], 'flow'), 1200);
 }
 
-function stopDemo() {
+function stopDemo(label = '今回は見送る') {
   hideChoices();
-  appendUserMessage('今回は見送る');
+  appendUserMessage(label);
   later(() => appendAgentMessage('わかったよ！条件は覚えておくね。また良いタイミングでお知らせするよ 😊'), 700);
 }
 
 function resetDemo() {
   clearTimers();
+  demoEnding.hidden = true;
   timeTransition.classList.remove('is-visible');
   dynamicMessages.replaceChildren();
   hideChoices();
-  document.querySelectorAll('dialog[open]').forEach((dialog) => dialog.close());
-  proposalTotal = 0;
   demoStarted = false;
   questionIndex = 0;
   answeredCount = 0;
@@ -610,21 +599,15 @@ function resetDemo() {
   showScreen('home');
 }
 
+demoEnding.addEventListener('click', () => {
+  resetDemo();
+  document.getElementById('start-demo').focus();
+});
+
 document.getElementById('start-demo').addEventListener('click', startOnboarding);
 document.getElementById('chat-app').addEventListener('click', openNotification);
 document.getElementById('notification-card').addEventListener('click', openNotification);
 document.getElementById('back-home').addEventListener('click', resetDemo);
-document.getElementById('restart-demo').addEventListener('click', resetDemo);
-dynamicMessages.addEventListener('click', (event) => {
-  const button = event.target.closest('[data-product-id]');
-  if (button) openProductDetails(button.dataset.productId);
-});
-document.querySelectorAll('[data-close-dialog]').forEach((button) => {
-  button.addEventListener('click', () => button.closest('dialog').close());
-});
-window.addEventListener('pageshow', (event) => {
-  if (event.persisted) resetDemo();
-});
 
 quickReplies.addEventListener('click', (event) => {
   const button = event.target.closest('[data-action]');
@@ -635,7 +618,7 @@ quickReplies.addEventListener('click', (event) => {
   if (button.dataset.action === 'feedback-product') chooseFavoriteProduct(button.dataset.value);
   if (button.dataset.action === 'feedback-score') saveFeedback(button.dataset.value);
   if (button.dataset.action === 'flow') {
-    const actions = { restart: resetDemo, details: showDetails, review: showFinalReview, proceed: startPaymentFlow, alternative: showAlternative, purpose: () => adjustPreference('purpose'), 'delivery-change': () => adjustPreference('delivery'), 'tax-no': () => answerTaxReturn(false), 'tax-yes': () => answerTaxReturn(true), 'one-stop-submit': submitOneStop, 'one-stop-later': deferOneStop, stop: stopDemo };
+    const actions = { details: showDetails, review: showFinalReview, proceed: startPaymentFlow, alternative: showAlternative, purpose: () => adjustPreference('purpose'), 'delivery-change': () => adjustPreference('delivery'), 'tax-no': () => answerTaxReturn(false), 'tax-yes': () => answerTaxReturn(true), 'one-stop-submit': submitOneStop, stop: stopDemo, cancel: () => stopDemo('やめる') };
     actions[button.dataset.value]?.();
   }
 });
@@ -643,10 +626,3 @@ quickReplies.addEventListener('click', (event) => {
 dots.forEach((dot) => dot.addEventListener('click', () => {
   if (dot.dataset.nav === 'home') resetDemo();
 }));
-
-// Keep reply bubbles clear of the conversation after rotation or browser-bar resizing.
-new ResizeObserver(() => {
-  if (!quickReplies.classList.contains('is-hidden')) {
-    chatBody.style.paddingBottom = `${Math.max(72, quickReplies.offsetHeight + 16)}px`;
-  }
-}).observe(quickReplies);
