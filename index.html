@@ -2,8 +2,15 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="description" content="ふるさと納税エージェントの体験デモ">
+  <meta name="theme-color" content="#102e55">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="ふるさと納税デモ">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="assets/icon-192.png">
+  <link rel="icon" type="image/png" href="assets/icon-192.png">
   <title>ふるさと納税くん｜デモ</title>
   <link rel="stylesheet" href="styles.css">
   <style>
@@ -101,6 +108,7 @@
     .quick-replies button:hover { background: #84d94f; box-shadow: none; }
     .quick-replies button:hover::after { border-top-color: #84d94f; }
   </style>
+  <link rel="stylesheet" href="mobile.css">
 </head>
 <body>
   <main class="demo-stage">
@@ -119,33 +127,20 @@
         </div>
 
         <section class="screen screen-home is-active" data-screen="home" aria-label="ホーム画面">
-          <header class="home-sky">
-            <div class="cloud cloud-a"></div><div class="cloud cloud-b"></div>
-            <div class="mascot mascot-large" role="img" aria-label="ふるさと納税くん"></div>
-            <div class="agent-pill">忘れていても、LINEで先回り！</div>
-            <h1>ふるさと<span>納税</span><small>くん</small></h1>
-            <p>あなたを知るほど、<br>ふるさと納税がラクになる。</p>
-          </header>
-
-          <div class="benefits" aria-label="サービスの特徴">
-            <article><b class="icon">♧</b><strong>忘れていても、届く</strong><span>ちょうどいい日に<br>LINEでお知らせ</span></article>
-            <article><b class="icon">●</b><strong>会話するほど覚える</strong><span>好みも家族も<br>暮らしの条件も</span></article>
-            <article><b class="icon">▣</b><strong>何百件から絞り込む</strong><span>上限・評判・配送まで<br>まとめて比較</span></article>
-            <article><b class="icon">✓</b><strong>ひとこと承認で完了</strong><span>複数の寄付も<br>まとめておまかせ</span></article>
+          <div class="wallpaper" aria-hidden="true"><i></i><i></i><i></i></div>
+          <div class="home-heading"><p>ふるさと納税くん</p><h1>あなたに合う返礼品を、<br>LINEで見つける体験。</h1><span>体験デモ</span></div>
+          <div class="app-grid">
+            <button class="chat-app" id="start-demo" aria-label="LINEでデモを始める">
+              <span class="app-icon"><img src="assets/LINE_APP_iOS.png" alt=""></span>
+              <strong>LINE</strong>
+            </button>
           </div>
-
-          <button class="primary-cta" id="start-demo"><span>▶</span> 1分で未来を体験する</button>
-
-          <section class="journey-card">
-            <div class="section-title">● LINEで、こんな未来を体験</div>
-            <ol>
-              <li><b>1</b><span><strong>話すだけで、あなたを理解</strong><small>面倒な入力フォームはありません</small></span></li>
-              <li><b>2</b><span><strong>数日後、ぴったりの提案が届く</strong><small>あなたは普段どおり過ごすだけ</small></span></li>
-              <li><b>3</b><span><strong>ひとこと承認で、寄付まで完了</strong><small>複数の手続きもまとめておまかせ</small></span></li>
-            </ol>
-            <p>所要時間：約1分</p>
-          </section>
-          <p class="mock-note">※ このデモはモックです。実際のサービスやデータとは関係ありません。</p>
+          <p class="home-start-guide">LINEアイコンをタップしてスタート</p>
+          <div class="home-footer">
+            <button class="install-link" id="install-app">ホーム画面に追加する（任意）</button>
+            <p>実際の寄付・決済・申請は行われません。<br>入力内容は保存されず、毎回最初から体験できます。</p>
+          </div>
+          <div class="dock" aria-hidden="true"><i>☎</i><i>✉</i><i>◉</i><i>●</i></div>
         </section>
 
         <section class="screen screen-notification" data-screen="notification" aria-label="通知画面">
@@ -168,21 +163,38 @@
           <header class="chat-header">
             <button class="icon-button" id="back-home" aria-label="ホームに戻る">‹</button>
             <div class="chat-title"><h2>ふるさと納税くん</h2></div>
-            <div class="chat-actions"><button class="icon-button" aria-label="検索">⌕</button><button class="icon-button" aria-label="メニュー">☰</button></div>
+            <div class="chat-actions"><button class="demo-reset" id="restart-demo">最初から</button></div>
           </header>
+          <p class="demo-label">体験デモ · 実際の寄付・決済・申請は行われません</p>
           <div class="chat-body" id="chat-body" aria-live="polite">
-            <div class="day-label">11月20日</div>
+            <div class="day-label">1月1日</div>
             <div id="dynamic-messages"></div>
           </div>
           <div class="quick-replies is-hidden" id="quick-replies"></div>
           <div class="composer" aria-hidden="true"><b>＋</b><span>▣</span><span>▧</span><p>メッセージを入力</p><span>☺</span><span>♩</span></div>
         </section>
-        <div class="time-transition" id="time-transition" aria-hidden="true"><small id="transition-label">プロフィールを保存しました</small><strong id="transition-title">5日後</strong><span id="transition-date">11月25日</span></div>
+        <dialog class="demo-dialog" id="product-dialog" aria-labelledby="product-title">
+          <div class="dialog-heading"><span>返礼品の詳細 · デモ</span><button data-close-dialog aria-label="詳細を閉じる">閉じる</button></div>
+          <div id="product-content"></div>
+          <p class="dialog-note">この画面は体験用です。実際の商品ページへの移動や決済は行いません。</p>
+          <button class="dialog-primary" data-close-dialog>チャットに戻る</button>
+        </dialog>
+        <dialog class="demo-dialog" id="install-dialog" aria-labelledby="install-title">
+          <div class="dialog-heading"><span>いつでもアイコンから起動</span><button data-close-dialog aria-label="追加方法を閉じる">閉じる</button></div>
+          <h2 id="install-title">ホーム画面に追加</h2>
+          <p>追加しなくても、このままデモを体験できます。</p>
+          <h3>iPhone · Safari</h3><ol><li>共有メニューを開く</li><li>「ホーム画面に追加」を選ぶ</li><li>「Webアプリとして開く」があればオンにして「追加」</li></ol>
+          <h3>Android · Chrome</h3><ol><li>メニュー（︙）を開く</li><li>「ホーム画面に追加」または「アプリをインストール」を選ぶ</li><li>画面の案内に沿って追加</li></ol>
+          <p class="dialog-note">項目が見つからない場合は、SafariまたはChromeで開いてください。追加後はホーム画面のアイコンから起動できます。</p>
+          <button class="dialog-primary" data-close-dialog>デモに戻る</button>
+        </dialog>
+        <div class="time-transition" id="time-transition" aria-hidden="true"><small id="transition-label">プロフィールを保存しました</small><strong id="transition-title">数ヶ月後</strong><span id="transition-date">5月1日</span></div>
       </div>
     </section>
 
     <nav class="screen-dots" aria-label="画面進行"><button class="is-current" data-nav="home" aria-label="ホーム画面"></button><button data-nav="notification" aria-label="通知画面"></button><button data-nav="chat" aria-label="チャット画面"></button></nav>
   </main>
   <script src="app.js"></script>
+  <script src="pwa.js"></script>
 </body>
 </html>

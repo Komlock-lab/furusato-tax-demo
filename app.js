@@ -13,10 +13,10 @@ const notificationMessage = document.getElementById('notification-message');
 const statusBarTime = document.querySelector('.status-bar > span');
 
 const timeline = {
-  onboarding: { date: '11月20日', minutes: 9 * 60 + 41 },
-  recommendation: { date: '11月25日', minutes: 18 * 60 + 30 },
+  onboarding: { date: '1月1日', minutes: 9 * 60 + 41 },
+  recommendation: { date: '5月1日', minutes: 18 * 60 + 30 },
   oneStop: { date: '12月20日', minutes: 10 * 60 + 15 },
-  yearEndReview: { date: '翌年11月30日', minutes: 19 * 60 }
+  yearEndReview: { date: '翌年1月31日', minutes: 19 * 60 }
 };
 
 const questions = [
@@ -28,7 +28,7 @@ const questions = [
   { key: 'family', text: '配偶者や扶養家族はいる？', options: ['扶養なし', '扶養あり'] },
   { key: 'donatedStatus', text: '今年はもう、ふるさと納税をした？', options: ['まだしていない', 'すでに寄付した'] },
   { key: 'donated', text: 'これまでに寄付した金額はいくら？', options: ['30,000円前後', '50,000円前後', '50,000円以上'], when: (answers) => answers.donatedStatus === 'すでに寄付した' },
-  { key: 'siteStatus', text: '普段使っているふるさと納税のサイトはある？', options: ['ある', '特にない'] },
+  { key: 'siteStatus', text: '普段使っているふるさと納税のサイトはある？', options: ['特にない', 'ある'] },
   { key: 'site', text: 'どのサイトを使っている？', options: ['楽天ふるさと納税', 'さとふる', 'ふるなび'], when: (answers) => answers.siteStatus === 'ある' },
   { key: 'oneStop', intro: 'ワンストップ特例は、確定申告をしなくてもふるさと納税の控除を受けられる制度です。<br>寄付先が5自治体以内で、確定申告の予定がない場合に利用できます。', text: 'ワンストップ特例を利用しますか？', options: ['利用したい', '今は決めない'] }
 ];
@@ -292,7 +292,7 @@ function saveProfile() {
   hideChoices();
   appendUserMessage('この内容で保存');
   later(() => appendAgentMessage('保存しました！<br>この条件に合うタイミングになったら、こちらからLINEしますね 😊'), 500);
-  later(() => showTimeTransition('プロフィールを保存しました', '5日後', timeline.recommendation.date, 'recommendation'), 1500);
+  later(() => showTimeTransition('プロフィールを保存しました', '数ヶ月後', timeline.recommendation.date, 'recommendation'), 1500);
 }
 
 function editProfile() {
@@ -312,8 +312,8 @@ function editProfile() {
 function stageOpeningMessage(stage) {
   const messages = {
     recommendation: 'あなたに合いそうな、いい返礼品を3つ見つけたよー！ 🎁',
-    oneStop: `先日の${proposalProducts.length}自治体への寄付について、ワンストップ特例の申請準備ができました 📝`,
-    yearEndReview: '今年届いた返礼品について、ひとつだけ教えてください 😊 一番よかったのはどれでしたか？'
+    oneStop: `5月の${proposalProducts.length}自治体への寄付について、ワンストップ特例の申請準備ができました 📝`,
+    yearEndReview: '昨年の寄付で届いた返礼品について、ひとつだけ教えてください 😊 一番よかったのはどれでしたか？'
   };
   return messages[stage];
 }
@@ -377,9 +377,7 @@ function selectProducts() {
 }
 
 function deliveryDates() {
-  if (profile.delivery === '年末年始') return ['翌年1月下旬', '翌年2月中旬', '翌年3月中旬'];
-  if (profile.delivery === '1〜2月') return ['12月中旬', '翌年3月中旬', '翌年4月上旬'];
-  return ['12月中旬', '翌年1月下旬', '翌年2月中旬'];
+  return ['6月中旬', '9月中旬', '10月上旬'];
 }
 
 function appendProposalCard() {
@@ -395,7 +393,7 @@ function appendProposalCard() {
   const card = document.createElement('article');
   card.className = 'proposal-card';
   card.innerHTML = `<h3>✨ あなた専用 おすすめ返礼品セット</h3>
-    <div class="campaign-badge">${site.name} 年末キャンペーン対象</div>
+    <div class="campaign-badge">${site.name} 春のキャンペーン対象</div>
     <div class="products" style="grid-template-columns:repeat(${proposalProducts.length},1fr)">${productsHtml}</div>
     <div class="proposal-summary"><p><span>合計寄付額</span><strong>${formatMoney(proposalTotal)}</strong></p><p><span>控除上限目安</span><strong>約${formatMoney(profile.limit)}</strong><i><b style="width:${Math.min(100, Math.round((profile.donatedAmount + proposalTotal) / profile.limit * 100))}%"></b></i></p><ul><li>保存した条件から選定</li><li>${profile.favorite}の好みを反映</li><li>冷凍庫の余裕を考慮</li><li>${deliveryCondition()}</li></ul></div>`;
   dynamicMessages.append(card);
@@ -404,14 +402,21 @@ function appendProposalCard() {
 
 function appendProductLinkMessages() {
   if (!proposalProducts.length) return;
-  const site = selectedDonationSite();
-  appendAgentMessage('返礼品ごとの商品ページを送るね。');
+  appendAgentMessage('返礼品の詳細を送るね。タップすると、このデモ内で確認できます。');
   proposalProducts.forEach((product, index) => {
-    later(() => appendAgentMessage(`${product.name}<br><a class="message-product-link" href="${product.url}" target="_blank" rel="noreferrer">${product.url}</a>`), 450 + index * 650);
+    later(() => appendAgentMessage(`${product.name}<br><button class="message-product-link" data-product-id="${product.id}">返礼品の詳細を見る</button>`), 450 + index * 650);
   });
   const afterLinks = 650 + proposalProducts.length * 650;
-  later(() => appendAgentMessage(`どれも${site.name}の商品ページです。<br>内容を確認したら、まとめて寄付と決済まで進められます。`), afterLinks);
+  later(() => appendAgentMessage('内容を確認したら、まとめて寄付と決済を体験できます。実際の支払いは発生しません。'), afterLinks);
   later(() => showChoices([{ label: '詳しく確認する', value: 'review' }, { label: '別の候補を見る', value: 'alternative' }, { label: '今回は見送る', value: 'stop' }], 'flow'), afterLinks + 650);
+}
+
+function openProductDetails(productId) {
+  const product = proposalProducts.find((item) => item.id === productId);
+  if (!product) return;
+  const index = proposalProducts.indexOf(product);
+  document.getElementById('product-content').innerHTML = `<div class="product-photo ${product.id}">${product.label}</div><h2 id="product-title">${product.name}</h2><dl><div><dt>寄付額</dt><dd>${formatMoney(product.amount)}</dd></div><div><dt>配送予定</dt><dd>${deliveryDates()[index]}</dd></div><div><dt>保管方法</dt><dd>${product.temp}</dd></div><div><dt>掲載サイト（デモ設定）</dt><dd>${selectedDonationSite().name}</dd></div></dl>`;
+  document.getElementById('product-dialog').showModal();
 }
 
 function showDetails() {
@@ -423,7 +428,7 @@ function showDetails() {
   later(() => appendAgentMessage(`${profile.favorite}を優先して、避けたいものは「${profile.avoid}」。<br>冷凍庫の余裕と「${deliveryCondition()}」も反映したよ。`), 1700);
   later(() => appendAgentMessage(profile.site === 'おまかせ'
     ? `普段使うサイトはないと聞いていたので、サイトごとのキャンペーンやポイント条件を比べました。<br>今回は${site.name}がいちばんポイントを貯めやすい設定だったので、${site.name}で寄付できる返礼品から探したよ！<br>※デモ上のキャンペーン設定です`
-    : `いつも使っている${site.name}を優先しました。<br>今年は年末キャンペーンで通常よりポイントを貯めやすい設定だったので、${site.name}で寄付できる返礼品から探したよ！<br>※デモ上のキャンペーン設定です`), 2500);
+    : `いつも使っている${site.name}を優先しました。<br>今年は春のキャンペーンで通常よりポイントを貯めやすい設定だったので、${site.name}で寄付できる返礼品から探したよ！<br>※デモ上のキャンペーン設定です`), 2500);
   later(appendProposalCard, 3300);
   later(appendProductLinkMessages, 4000);
 }
@@ -467,7 +472,7 @@ function showCompleteCard() {
   dynamicMessages.append(card);
   appendAgentMessage(profile.oneStop === '利用したい' ? 'すべて完了しました！ワンストップ申請の期限前にも、こちらからお知らせしますね 😊' : 'すべて完了しました！返礼品の発送前にも、こちらからお知らせしますね 😊');
   scrollChat();
-  later(() => showTimeTransition('寄付と決済が完了しました', '25日後', timeline.oneStop.date, 'oneStop'), 3200);
+  later(() => showTimeTransition('寄付と決済が完了しました', '約8ヶ月後', timeline.oneStop.date, 'oneStop'), 3200);
 }
 
 function startOneStopChat() {
@@ -516,7 +521,7 @@ function submitOneStop() {
     card.className = 'complete-card one-stop-complete';
     card.innerHTML = `<div class="check">✓</div><h3>申請が完了しました</h3><p>${proposalProducts.length}自治体すべてに<br>ワンストップ特例を申請しました。</p><div class="delivery-list"><div><b>申請ステータス</b><span>受付済み</span></div><div><b>申請期限</b><span>1月10日</span></div><div><b>控除予定</b><span>翌年度の住民税</span></div></div>`;
     dynamicMessages.append(card);
-    appendAgentMessage('申請まで完了しました！不備の連絡が届いた場合も、こちらからお知らせしますね。<br>年末には、返礼品の感想も聞かせてください 😊');
+    appendAgentMessage('申請まで完了しました！不備の連絡が届いた場合も、こちらからお知らせしますね。<br>翌年1月には、返礼品の感想も聞かせてください 😊');
     scrollChat();
     later(() => scheduleYearEndReview('ワンストップ申請が完了しました'), 3200);
   }, 1700);
@@ -530,7 +535,7 @@ function deferOneStop() {
 }
 
 function scheduleYearEndReview(label) {
-  showTimeTransition(label, '翌年・年末', timeline.yearEndReview.date, 'yearEndReview');
+  showTimeTransition(label, '翌年・1月', timeline.yearEndReview.date, 'yearEndReview');
 }
 
 function startYearEndReviewChat() {
@@ -564,10 +569,11 @@ function saveFeedback(score) {
     const card = document.createElement('article');
     card.className = 'memory-card';
     const nextCondition = score === '次回は別のもの' ? `${product.label}は優先度を下げる` : `${product.label}と近い返礼品を優先`;
-    card.innerHTML = `<div class="memory-icon">✓</div><div><small>エージェントメモを更新</small><h3>来年の検索条件に保存しました</h3><dl><div><dt>今回の評価</dt><dd>${product.label}・${score}</dd></div><div><dt>来年の条件</dt><dd>${nextCondition}</dd></div><div><dt>継続する条件</dt><dd>控除上限・冷凍庫・配送時期</dd></div></dl></div>`;
+    card.innerHTML = `<div class="memory-icon">✓</div><div><small>エージェントメモを更新</small><h3>今年の検索条件に保存しました</h3><dl><div><dt>今回の評価</dt><dd>${product.label}・${score}</dd></div><div><dt>今年の条件</dt><dd>${nextCondition}</dd></div><div><dt>継続する条件</dt><dd>控除上限・冷凍庫・配送時期</dd></div></dl></div>`;
     dynamicMessages.append(card);
-    appendAgentMessage('ありがとう！この評価を来年の提案に使います。<br>来年は今年よりも、あなたに合う候補を早く見つけられます 😊');
+    appendAgentMessage('ありがとう！この評価を今年の提案に使います。<br>今年は昨年よりも、あなたに合う候補を早く見つけられます 😊');
     scrollChat();
+    showChoices([{ label: 'もう一度体験する', value: 'restart' }], 'flow');
   }, 650);
 }
 
@@ -589,6 +595,8 @@ function resetDemo() {
   timeTransition.classList.remove('is-visible');
   dynamicMessages.replaceChildren();
   hideChoices();
+  document.querySelectorAll('dialog[open]').forEach((dialog) => dialog.close());
+  proposalTotal = 0;
   demoStarted = false;
   questionIndex = 0;
   answeredCount = 0;
@@ -606,6 +614,17 @@ document.getElementById('start-demo').addEventListener('click', startOnboarding)
 document.getElementById('chat-app').addEventListener('click', openNotification);
 document.getElementById('notification-card').addEventListener('click', openNotification);
 document.getElementById('back-home').addEventListener('click', resetDemo);
+document.getElementById('restart-demo').addEventListener('click', resetDemo);
+dynamicMessages.addEventListener('click', (event) => {
+  const button = event.target.closest('[data-product-id]');
+  if (button) openProductDetails(button.dataset.productId);
+});
+document.querySelectorAll('[data-close-dialog]').forEach((button) => {
+  button.addEventListener('click', () => button.closest('dialog').close());
+});
+window.addEventListener('pageshow', (event) => {
+  if (event.persisted) resetDemo();
+});
 
 quickReplies.addEventListener('click', (event) => {
   const button = event.target.closest('[data-action]');
@@ -616,7 +635,7 @@ quickReplies.addEventListener('click', (event) => {
   if (button.dataset.action === 'feedback-product') chooseFavoriteProduct(button.dataset.value);
   if (button.dataset.action === 'feedback-score') saveFeedback(button.dataset.value);
   if (button.dataset.action === 'flow') {
-    const actions = { details: showDetails, review: showFinalReview, proceed: startPaymentFlow, alternative: showAlternative, purpose: () => adjustPreference('purpose'), 'delivery-change': () => adjustPreference('delivery'), 'tax-no': () => answerTaxReturn(false), 'tax-yes': () => answerTaxReturn(true), 'one-stop-submit': submitOneStop, 'one-stop-later': deferOneStop, stop: stopDemo };
+    const actions = { restart: resetDemo, details: showDetails, review: showFinalReview, proceed: startPaymentFlow, alternative: showAlternative, purpose: () => adjustPreference('purpose'), 'delivery-change': () => adjustPreference('delivery'), 'tax-no': () => answerTaxReturn(false), 'tax-yes': () => answerTaxReturn(true), 'one-stop-submit': submitOneStop, 'one-stop-later': deferOneStop, stop: stopDemo };
     actions[button.dataset.value]?.();
   }
 });
