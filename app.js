@@ -112,7 +112,7 @@ function showScreen(name) {
 }
 
 function scrollChat() {
-  requestAnimationFrame(() => { chatBody.scrollTop = chatBody.scrollHeight; });
+  requestAnimationFrame(() => { chatBody.scrollTo({ top: chatBody.scrollHeight, behavior: 'instant' }); });
 }
 
 function formatClock(minutes) {
@@ -643,3 +643,10 @@ quickReplies.addEventListener('click', (event) => {
 dots.forEach((dot) => dot.addEventListener('click', () => {
   if (dot.dataset.nav === 'home') resetDemo();
 }));
+
+// Keep reply bubbles clear of the conversation after rotation or browser-bar resizing.
+new ResizeObserver(() => {
+  if (!quickReplies.classList.contains('is-hidden')) {
+    chatBody.style.paddingBottom = `${Math.max(72, quickReplies.offsetHeight + 16)}px`;
+  }
+}).observe(quickReplies);
