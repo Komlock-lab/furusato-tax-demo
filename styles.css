@@ -174,7 +174,7 @@
     line-height: 1.6;
     overflow-wrap: anywhere;
   }
-  .phone-screen .message-row.user .bubble { max-width: 88%; }
+  .phone-screen .message-row.user .bubble { max-width: calc(100% - 60px); }
   .phone-screen .message-row .bubble time {
     position: static;
     display: block;
@@ -183,6 +183,16 @@
     font-size: 14px;
     line-height: 1.35;
     text-align: right;
+  }
+  .phone-screen .message-row.user .bubble time {
+    position: absolute;
+    top: auto;
+    right: calc(100% + 8px);
+    bottom: 0;
+    left: auto;
+    width: 44px;
+    margin-top: 0;
+    white-space: nowrap;
   }
   .phone-screen .bubble small,
   .phone-screen .message-product-link { font-size: 14px; line-height: 1.6; }
