@@ -53,8 +53,13 @@
     overflow-wrap: anywhere;
   }
   .primary-cta { width: min(320px, calc(100% - 32px)); }
-  .benefits { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-  .benefits strong { white-space: normal; }
+  .benefits { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .benefits article { min-height: 148px; padding: 16px 10px; }
+  .benefits article:nth-child(2n) { border-right: 0; }
+  .benefits article:nth-child(-n+2) { border-bottom: 1px solid var(--line); }
+  .benefits .icon { font-size: 26px; margin-bottom: 10px; }
+  .benefits strong { font-size: 14px; line-height: 1.6; white-space: normal; }
+  .benefits span { margin-top: 7px; font-size: 13px; line-height: 1.65; }
   .journey-card li > b { flex-shrink: 0; }
   .composer p { min-width: 0; white-space: nowrap; }
 }
