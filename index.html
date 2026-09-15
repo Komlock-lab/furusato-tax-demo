@@ -89,7 +89,7 @@
       padding: 8px 12px;
       border: 0;
       border-radius: 17px 3px 17px 17px;
-      background: #8de055;
+      background: #d9f5c5;
       color: #17251a;
       text-align: left;
       font-size: 12px;
@@ -104,11 +104,20 @@
       position: absolute;
       right: -6px;
       top: 0;
-      border-top: 7px solid #8de055;
+      border-top: 7px solid #d9f5c5;
       border-right: 7px solid transparent;
     }
-    .quick-replies button:hover { background: #84d94f; box-shadow: none; }
-    .quick-replies button:hover::after { border-top-color: #84d94f; }
+    /* 未選択の選択肢は薄い緑、押すと送信済みメッセージと同じ緑 */
+    .quick-replies button:hover { background: #c9efad; box-shadow: none; }
+    .quick-replies button:hover::after { border-top-color: #c9efad; }
+    .quick-replies button:active { background: #8de055; }
+    .quick-replies button:active::after { border-top-color: #8de055; }
+    .quick-replies-label {
+      margin: 0 0 -4px;
+      color: #40566a;
+      font-size: 8px;
+      line-height: 1.3;
+    }
     /* LINE実機（ライトブルーテーマ）のヘッダー・入力欄 */
     .phone-screen.is-chat .status-bar { color: #fff; background: #84d0ef; }
     .phone-screen.is-chat .status-icons i { background: #fff; }

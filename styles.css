@@ -184,6 +184,7 @@
   }
   .phone-screen .message-row.user .bubble { max-width: calc(100% - 60px); }
   .phone-screen .message-row > time { font-size: 10px; line-height: 1.3; }
+  .phone-screen .quick-replies-label { font-size: 12px; }
   .phone-screen .bubble small,
   .phone-screen .message-product-link { font-size: 14px; line-height: 1.6; }
   .phone-screen .screen-chat .quick-replies {

@@ -166,7 +166,7 @@ function updateChatSpacing() {
 new ResizeObserver(updateChatSpacing).observe(quickReplies);
 
 function showChoices(options, action = 'answer') {
-  quickReplies.innerHTML = options.map((option) => {
+  quickReplies.innerHTML = '<p class="quick-replies-label">以下から選んでください</p>' + options.map((option) => {
     const item = typeof option === 'string' ? { label: option, value: option } : option;
     return `<button data-action="${action}" data-value="${item.value}">${item.label}</button>`;
   }).join('');
