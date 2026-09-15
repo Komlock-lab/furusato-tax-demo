@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="ふるさと納税エージェントの体験デモ">
+  <title>ふるさと納税くん｜デモ</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* LINEの実画面に合わせたチャット表示 */
+    .screen-chat { background: #8faed0; }
+    .chat-body { padding: 10px 8px 18px; background: #8faed0; }
+    .message-row { gap: 7px; margin-bottom: 12px; }
+    .mascot-tiny { width: 32px; height: 32px; }
+    .profile-confirm-hero .profile-avatar {
+      width: 50px;
+      height: 50px;
+      background-size: 800px 533px;
+      background-position: -28px -267px;
+      background-color: #fff;
+    }
+    .bubble {
+      max-width: 76%;
+      padding: 7px 10px;
+      border-radius: 17px;
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 1.45;
+    }
+    .message-row.agent .bubble { border-radius: 3px 17px 17px 17px; }
+    .message-row.agent .bubble::before {
+      left: -6px;
+      border-top-width: 7px;
+      border-left-width: 7px;
+    }
+    .message-row.user .bubble {
+      padding: 7px 10px;
+      background: #8de055;
+      border-radius: 17px 3px 17px 17px;
+    }
+    .message-row.user .bubble::after {
+      right: -6px;
+      border-top-width: 7px;
+      border-right-width: 7px;
+      border-top-color: #8de055;
+    }
+    .bubble time {
+      right: -30px;
+      bottom: 0;
+      font-size: 7px;
+      line-height: 1.2;
+      color: #40566a;
+    }
+    .message-row.user .bubble time {
+      left: -34px;
+      bottom: 0;
+      min-width: 27px;
+      text-align: right;
+    }
+    .chat-body .profile-confirm-card,
+    .chat-body .proposal-card,
+    .chat-body .review-card,
+    .chat-body .complete-card,
+    .chat-body .one-stop-card,
+    .chat-body .memory-card { margin-left: 39px; }
+    .quick-replies {
+      right: 8px;
+      left: 8px;
+      width: auto;
+      gap: 10px;
+      padding: 10px 0 12px;
+      pointer-events: none;
+    }
+    .quick-replies button,
+    .quick-replies button:first-child {
+      position: relative;
+      max-width: calc(100% - 46px);
+      width: fit-content;
+      min-height: 0;
+      padding: 8px 12px;
+      border: 0;
+      border-radius: 17px 3px 17px 17px;
+      background: #8de055;
+      color: #17251a;
+      text-align: left;
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 1.45;
+      white-space: nowrap;
+      box-shadow: none;
+      pointer-events: auto;
+    }
+    .quick-replies button::after {
+      content: "";
+      position: absolute;
+      right: -6px;
+      top: 0;
+      border-top: 7px solid #8de055;
+      border-right: 7px solid transparent;
+    }
+    .quick-replies button:hover { background: #84d94f; box-shadow: none; }
+    .quick-replies button:hover::after { border-top-color: #84d94f; }
+  </style>
+</head>
+<body>
+  <main class="demo-stage">
+    <div class="stage-copy" aria-hidden="true">
+      <span>YOUR LIFE, YOUR BEST CHOICE</span>
+      <strong>今年のふるさと納税、<br>もう迷わない。</strong>
+      <p>あなたが忘れていても、ちょうどいい日にLINEが届く。<br>探す・比べる・申し込む時間を、エージェントが引き受けます。</p>
+    </div>
+
+    <section class="phone" aria-label="ふるさと納税エージェント デモ">
+      <div class="phone-speaker" aria-hidden="true"></div>
+      <div class="phone-screen">
+        <div class="status-bar" aria-hidden="true">
+          <span>9:41</span>
+          <div class="status-icons"><i></i><i></i><i></i><b></b></div>
+        </div>
+
+        <section class="screen screen-home is-active" data-screen="home" aria-label="ホーム画面">
+          <header class="home-sky">
+            <div class="cloud cloud-a"></div><div class="cloud cloud-b"></div>
+            <div class="mascot mascot-large" role="img" aria-label="ふるさと納税くん"></div>
+            <div class="agent-pill">忘れていても、LINEで先回り！</div>
+            <h1>ふるさと<span>納税</span><small>くん</small></h1>
+            <p>あなたを知るほど、<br>ふるさと納税がラクになる。</p>
+          </header>
+
+          <div class="benefits" aria-label="サービスの特徴">
+            <article><b class="icon">♧</b><strong>忘れていても、届く</strong><span>ちょうどいい日に<br>LINEでお知らせ</span></article>
+            <article><b class="icon">●</b><strong>会話するほど覚える</strong><span>好みも家族も<br>暮らしの条件も</span></article>
+            <article><b class="icon">▣</b><strong>何百件から絞り込む</strong><span>上限・評判・配送まで<br>まとめて比較</span></article>
+            <article><b class="icon">✓</b><strong>ひとこと承認で完了</strong><span>複数の寄付も<br>まとめておまかせ</span></article>
+          </div>
+
+          <button class="primary-cta" id="start-demo"><span>▶</span> 1分で未来を体験する</button>
+
+          <section class="journey-card">
+            <div class="section-title">● LINEで、こんな未来を体験</div>
+            <ol>
+              <li><b>1</b><span><strong>話すだけで、あなたを理解</strong><small>面倒な入力フォームはありません</small></span></li>
+              <li><b>2</b><span><strong>数日後、ぴったりの提案が届く</strong><small>あなたは普段どおり過ごすだけ</small></span></li>
+              <li><b>3</b><span><strong>ひとこと承認で、寄付まで完了</strong><small>複数の手続きもまとめておまかせ</small></span></li>
+            </ol>
+            <p>所要時間：約1分</p>
+          </section>
+          <p class="mock-note">※ このデモはモックです。実際のサービスやデータとは関係ありません。</p>
+        </section>
+
+        <section class="screen screen-notification" data-screen="notification" aria-label="通知画面">
+          <div class="wallpaper" aria-hidden="true"><i></i><i></i><i></i></div>
+          <div class="app-grid">
+            <button class="chat-app" id="chat-app" aria-label="LINEを開く">
+              <span class="app-icon"><img src="assets/LINE_APP_iOS.png" alt=""><b class="notify-badge">1</b></span>
+              <strong>LINE</strong>
+            </button>
+          </div>
+          <button class="notification-card" id="notification-card" aria-label="通知を開く">
+            <img class="mini-app-icon" src="assets/LINE_APP_iOS.png" alt="LINE">
+            <span class="notification-copy"><b>ふるさと納税くん</b><small>今</small><strong id="notification-message">あなたに合いそうな、いい返礼品を3つ見つけたよー！ 🎁</strong></span>
+          </button>
+          <div class="tap-guide"><span>↗</span><p>タップして<br>チャットを開く</p></div>
+          <div class="dock" aria-hidden="true"><i>☎</i><i>✉</i><i>◉</i><i>●</i></div>
+        </section>
+
+        <section class="screen screen-chat" data-screen="chat" aria-label="チャット画面">
+          <header class="chat-header">
+            <button class="icon-button" id="back-home" aria-label="ホームに戻る">‹</button>
+            <div class="chat-title"><h2>ふるさと納税くん</h2></div>
+            <div class="chat-actions"><button class="icon-button" aria-label="検索">⌕</button><button class="icon-button" aria-label="メニュー">☰</button></div>
+          </header>
+          <div class="chat-body" id="chat-body" aria-live="polite">
+            <div class="day-label">11月20日</div>
+            <div id="dynamic-messages"></div>
+          </div>
+          <div class="quick-replies is-hidden" id="quick-replies"></div>
+          <div class="composer" aria-hidden="true"><b>＋</b><span>▣</span><span>▧</span><p>メッセージを入力</p><span>☺</span><span>♩</span></div>
+        </section>
+        <div class="time-transition" id="time-transition" aria-hidden="true"><small id="transition-label">プロフィールを保存しました</small><strong id="transition-title">5日後</strong><span id="transition-date">11月25日</span></div>
+      </div>
+    </section>
+
+    <nav class="screen-dots" aria-label="画面進行"><button class="is-current" data-nav="home" aria-label="ホーム画面"></button><button data-nav="notification" aria-label="通知画面"></button><button data-nav="chat" aria-label="チャット画面"></button></nav>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
