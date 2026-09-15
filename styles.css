@@ -19,6 +19,8 @@
 .demo-ending small{margin-top:40px;font-size:12px;color:#aaa}
 .demo-ending:focus-visible{outline:2px solid #fff;outline-offset:-8px}
 
+.phone-screen .screen-home .mascot-large { clip-path: circle(closest-side); }
+
 /* On mobile, the demo screen fills the viewport without the device frame. */
 @media (max-width: 767px) {
   body { background: #fff; }
