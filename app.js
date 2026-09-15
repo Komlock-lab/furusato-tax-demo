@@ -156,6 +156,15 @@ function appendAgentMessage(text) {
   scrollChat();
 }
 
+function updateChatSpacing() {
+  chatBody.style.paddingBottom = !quickReplies.classList.contains('is-hidden') && getComputedStyle(quickReplies).position === 'absolute'
+    ? `${Math.max(72, quickReplies.offsetHeight + 16)}px`
+    : '';
+}
+
+// Reply buttons occupy their own row on mobile, including after rotation.
+new ResizeObserver(updateChatSpacing).observe(quickReplies);
+
 function showChoices(options, action = 'answer') {
   quickReplies.innerHTML = options.map((option) => {
     const item = typeof option === 'string' ? { label: option, value: option } : option;
@@ -163,7 +172,7 @@ function showChoices(options, action = 'answer') {
   }).join('');
   quickReplies.classList.remove('is-hidden');
   requestAnimationFrame(() => {
-    chatBody.style.paddingBottom = `${Math.max(72, quickReplies.offsetHeight + 16)}px`;
+    updateChatSpacing();
     scrollChat();
   });
 }

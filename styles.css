@@ -59,7 +59,7 @@
   .benefits article:nth-child(-n+2) { border-bottom: 1px solid var(--line); }
   .benefits .icon { font-size: 26px; margin-bottom: 10px; }
   .benefits strong { font-size: 14px; line-height: 1.6; white-space: normal; }
-  .benefits span { margin-top: 7px; font-size: 13px; line-height: 1.65; }
+  .benefits span { margin-top: 7px; font-size: 14px; line-height: 1.65; }
   .journey-card li > b { flex-shrink: 0; }
   .composer p { min-width: 0; white-space: nowrap; }
 }
@@ -72,7 +72,7 @@
 }
 
 /* Keep notification actions reachable on short screens and in landscape. */
-@media (max-width: 767px) and (max-height: 700px) {
+@media (max-width: 767px) {
   .screen-notification {
     overflow-y: auto;
     display: flex;
@@ -91,4 +91,159 @@
   .tap-guide span { font-size: 40px; }
   .tap-guide p { font-size: 15px; }
   .dock { margin-top: auto; }
+}
+
+/* Readable mobile type, including text in the optional home themes. */
+@media (max-width: 767px) {
+  .phone-screen { font-size: 16px; line-height: 1.6; }
+  .phone-screen .status-bar { font-size: 14px; }
+  .phone-screen .screen-home .home-sky {
+    display: grid;
+    grid-template-columns: 88px minmax(0, 1fr);
+    align-items: center;
+    gap: 16px 10px;
+    height: auto;
+    min-height: 0;
+    padding: 48px 16px 28px;
+  }
+  .phone-screen .screen-home .agent-pill {
+    grid-column: 1 / -1;
+    justify-self: center;
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.6;
+    white-space: normal;
+  }
+  .phone-screen .screen-home .mascot-large {
+    position: relative;
+    grid-column: 1;
+    grid-row: 2;
+    inset: auto;
+    width: 88px;
+    height: 104px;
+    transform: none;
+    background-size: 1056px 704px;
+    background-position: -25px -43px;
+  }
+  .phone-screen .screen-home .home-sky h1 {
+    grid-column: 2;
+    grid-row: 2;
+    margin: 0;
+    font-size: clamp(24px, 6.5vw, 32px);
+    letter-spacing: -.06em;
+  }
+  .phone-screen .screen-home .home-sky h1 small { font-size: 16px; }
+  .phone-screen .screen-home .home-sky p {
+    grid-column: 1 / -1;
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.8;
+  }
+  .phone-screen .screen-home .benefits strong { font-size: 14px; }
+  .phone-screen .screen-home .benefits span { font-size: 14px; }
+  .phone-screen .screen-home .primary-cta {
+    height: auto;
+    min-height: 50px;
+    padding: 12px;
+    font-size: 16px;
+    line-height: 1.6;
+  }
+  .phone-screen .screen-home .primary-cta span { font-size: 14px; }
+  .phone-screen .screen-home .section-title,
+  .phone-screen .screen-home .journey-card li strong { font-size: 16px; line-height: 1.6; }
+  .phone-screen .screen-home .journey-card li { align-items: flex-start; }
+  .phone-screen .screen-home .journey-card li > b,
+  .phone-screen .screen-home .journey-card li small,
+  .phone-screen .screen-home .journey-card > p,
+  .phone-screen .screen-home .mock-note { font-size: 14px; line-height: 1.7; }
+  .phone-screen .screen-home .mock-note { margin: 16px; }
+  .phone-screen .chat-app strong,
+  .phone-screen .notification-copy small { font-size: 14px; }
+  .phone-screen .notification-copy { min-width: 0; }
+  .phone-screen .notification-copy > b { display: block; padding-right: 24px; font-size: 16px; }
+  .phone-screen .notification-copy strong { font-size: 16px; overflow-wrap: anywhere; }
+  .phone-screen .tap-guide p { font-size: 16px; }
+  .phone-screen .chat-header { grid-template-columns: 40px minmax(0, 1fr) 64px; }
+  .phone-screen .chat-title h2 { font-size: 16px; }
+  .phone-screen .day-label { font-size: 14px; }
+  .phone-screen .message-row .bubble {
+    max-width: calc(100% - 39px);
+    min-width: 0;
+    padding: 10px 12px;
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+  }
+  .phone-screen .message-row.user .bubble { max-width: 88%; }
+  .phone-screen .message-row .bubble time {
+    position: static;
+    display: block;
+    min-width: 0;
+    margin-top: 6px;
+    font-size: 14px;
+    line-height: 1.35;
+    text-align: right;
+  }
+  .phone-screen .bubble small,
+  .phone-screen .message-product-link { font-size: 14px; line-height: 1.6; }
+  .phone-screen .screen-chat .quick-replies {
+    position: relative;
+    inset: auto;
+    margin: 0 8px;
+    max-height: 40%;
+    padding: 10px 8px 12px 0;
+  }
+  .phone-screen .screen-chat .quick-replies button,
+  .phone-screen .screen-chat .quick-replies button:first-child {
+    font-size: 16px;
+    line-height: 1.6;
+    min-height: 44px;
+    max-width: 100%;
+  }
+  .phone-screen .composer { height: auto; min-height: 52px; gap: 6px; }
+  .phone-screen .composer p {
+    height: auto;
+    padding: 6px 8px;
+    font-size: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .phone-screen .chat-body :is(.profile-confirm-card, .proposal-card, .review-card, .complete-card, .one-stop-card, .memory-card, .processing-card) {
+    margin-left: 0;
+    margin-right: 0;
+    font-size: 16px;
+    overflow-wrap: anywhere;
+  }
+  .phone-screen .chat-body :is(article h3, article dd, article strong, .products b, .flex-actions button, .restart-button) {
+    font-size: 16px;
+    line-height: 1.6;
+  }
+  .phone-screen .chat-body :is(article small, article dt, article p, .profile-confirm-limit span, .one-stop-head span, .review-total span, .campaign-badge, .product-photo, .products em, .proposal-summary ul, .proposal-link, .delivery-list div, .step) {
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .phone-screen .profile-confirm-card dl { grid-template-columns: minmax(0, 1fr); }
+  .phone-screen .profile-confirm-hero > div:last-child { min-width: 0; }
+  .phone-screen .products { display: flex; flex-direction: column; gap: 16px; }
+  .phone-screen .products > div {
+    display: grid;
+    grid-template-columns: 80px minmax(0, 1fr);
+    gap: 4px 10px;
+    align-items: start;
+  }
+  .phone-screen .product-photo { grid-row: 1 / 3; min-height: 80px; }
+  .phone-screen .products b { white-space: normal; }
+  .phone-screen .proposal-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .phone-screen .proposal-summary p { padding: 0; border: 0; }
+  .phone-screen .proposal-summary ul { grid-column: 1 / -1; padding-left: 0; }
+  .phone-screen :is(.review-card, .one-stop-card) dl div,
+  .phone-screen .delivery-list div { display: grid; gap: 4px; padding: 10px 0; }
+  .phone-screen :is(.review-card, .one-stop-card) dd { text-align: left; }
+  .phone-screen .review-total { flex-wrap: wrap; gap: 6px 12px; }
+  .phone-screen .memory-card > div:last-child { min-width: 0; }
+  .phone-screen .time-transition { padding: 24px; }
+  .phone-screen .time-transition small,
+  .phone-screen .time-transition span,
+  .phone-screen .demo-ending small { font-size: 14px; line-height: 1.6; }
+  .phone-screen .demo-ending span { font-size: 16px; }
 }
